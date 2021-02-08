@@ -27,4 +27,11 @@ public class UserService {
         return userMapper.insert(new User(null, user.getUsername(), encodedSalt, hashedPassword, user.getFirstName(), user.getLastname()));
     }
 
+    public boolean isUsernameAvailable(String username) {
+        return userMapper.getUser(username) == null;
+    }
+
+    public User getUser(String username) {
+        return userMapper.getUser(username);
+    }
 }
