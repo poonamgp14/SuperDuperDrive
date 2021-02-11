@@ -98,6 +98,12 @@
                                     </div>
                                     <div class="modal-body">
                                         <form action="#" th:action="@{/notes}" method="POST">
+                                            <div id="success-msg" th:if="${noteAddSuccess}" class="alert alert-dark" >
+                                                <span> You successfully added a new note</span>
+                                            </div>
+                                            <div id="error-msg" th:if="${noteAddError}" class="alert alert-danger">
+                                                <span th:text="${noteAddError}"></span>
+                                            </div>
                                             <input type="hidden" name="noteId" id="note-id">
                                             <div class="form-group">
                                                 <label for="note-title" class="col-form-label">Title</label>

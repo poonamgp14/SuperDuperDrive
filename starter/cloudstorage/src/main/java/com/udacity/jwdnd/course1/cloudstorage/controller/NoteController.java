@@ -23,8 +23,6 @@ public class NoteController {
     public String createNote(@ModelAttribute Note note, @ModelAttribute User user, Model model){
         String noteAddError = null;
         String noteAddSuccess = null;
-        System.out.println("----------------------------");
-        System.out.println(note);
         Integer userId = user.getUserId();
         note.setUserId(userId);
         int rowsAdded = noteService.createNote(note);
@@ -37,6 +35,6 @@ public class NoteController {
             model.addAttribute("noteAddError", noteAddError);
         }
 
-        return "";
+        return "home";
     }
 }
