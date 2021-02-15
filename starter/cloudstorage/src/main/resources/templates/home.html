@@ -61,6 +61,12 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="nav-notes" role="tabpanel" aria-labelledby="nav-notes-tab">
+                        <div id="success-msg" th:if="${noteAddSuccess}" class="alert alert-dark" >
+                            <span> You successfully added a new note</span>
+                        </div>
+                        <div id="error-msg" th:if="${noteAddError}" class="alert alert-danger">
+                            <span th:text="${noteAddError}"></span>
+                        </div>
                         <button style="margin: 0.25em;" type="button" class="btn btn-info float-right" onclick="showNoteModal()">
                             + Add a New Note
                         </button>
@@ -74,14 +80,18 @@
                                         <th style="width: 60%" scope="col">Description</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody th:each="note:${notes}">
                                     <tr>
                                         <td>
-                                            <button type="button" class="btn btn-success">Edit</button>
+                                            <button type="button" class="btn btn-success"
+                                                    th:note-title="${note.getTitle()}"
+                                                    th:note-description="${note.getDescription()}"
+                                                    th:note-id="${note.getNoteId()}"
+                                                    onclick="showNoteModal(this, this.getAttribute('note-id'), this.getAttribute('note-description'), this.getAttribute('note-title'))">Edit</button>
                                             <a class="btn btn-danger">Delete</a>
                                         </td>
-                                        <th scope="row">Example Note Title</th>
-                                        <td>Example Note Description </td>
+                                        <th th:text="${note.getTitle()}" scope="row">Example Note Title</th>
+                                        <td th:text="${note.getDescription()}">Example Note Description </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -98,12 +108,6 @@
                                     </div>
                                     <div class="modal-body">
                                         <form action="#" th:action="@{/notes}" method="POST">
-                                            <div id="success-msg" th:if="${noteAddSuccess}" class="alert alert-dark" >
-                                                <span> You successfully added a new note</span>
-                                            </div>
-                                            <div id="error-msg" th:if="${noteAddError}" class="alert alert-danger">
-                                                <span th:text="${noteAddError}"></span>
-                                            </div>
                                             <input type="hidden" name="noteId" id="note-id">
                                             <div class="form-group">
                                                 <label for="note-title" class="col-form-label">Title</label>

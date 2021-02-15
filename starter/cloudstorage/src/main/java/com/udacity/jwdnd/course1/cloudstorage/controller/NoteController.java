@@ -4,6 +4,7 @@ import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -14,15 +15,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/notes")
 public class NoteController {
     private final NoteService noteService;
+    private final UserService userService;
 
-    public NoteController(NoteService noteService) {
+    public NoteController(NoteService noteService, UserService userService) {
         this.noteService = noteService;
+        this.userService = userService;
     }
 
     @PostMapping
-    public String createNote(@ModelAttribute Note note, @ModelAttribute User user, Model model){
+    public String createNote(@ModelAttribute Note note, Authentication authentication, Model model){
         String noteAddError = null;
         String noteAddSuccess = null;
+        User user = userService.getUser(authentication.getName());
         Integer userId = user.getUserId();
         note.setUserId(userId);
         int rowsAdded = noteService.createNote(note);
@@ -35,6 +39,6 @@ public class NoteController {
             model.addAttribute("noteAddError", noteAddError);
         }
 
-        return "home";
+        return "redirect:/home";
     }
 }

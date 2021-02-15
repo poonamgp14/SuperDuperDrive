@@ -16,6 +16,9 @@ public class Note {
     public String getTitle() {
         return noteTitle;
     }
+    public Integer getNoteId() {
+        return noteId;
+    }
 
     public String getDescription() {
         return noteDescription;
