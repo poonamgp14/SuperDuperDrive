@@ -22,6 +22,10 @@ public class NoteService {
     public List<Note> getNotes(Integer userId){
         return noteMapper.getNotes(userId);
     }
+
+    public int updateNote(Note note) {
+        return noteMapper.updateNote(new Note(null, note.getTitle(), note.getDescription(), note.getUserId()));
+    }
 //
 //    public boolean isUsernameAvailable(String username) {
 //        return userMapper.getUser(username) == null;
