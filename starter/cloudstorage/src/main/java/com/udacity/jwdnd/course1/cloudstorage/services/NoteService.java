@@ -24,7 +24,7 @@ public class NoteService {
     }
 
     public int updateNote(Note note) {
-        return noteMapper.updateNote(new Note(null, note.getTitle(), note.getDescription(), note.getUserId()));
+        return noteMapper.updateNote(new Note(note.getNoteId(), note.getTitle(), note.getDescription(), note.getUserId()));
     }
 //
 //    public boolean isUsernameAvailable(String username) {
