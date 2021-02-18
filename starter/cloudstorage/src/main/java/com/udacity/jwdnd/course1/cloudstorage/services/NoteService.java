@@ -26,6 +26,9 @@ public class NoteService {
     public int updateNote(Note note) {
         return noteMapper.updateNote(new Note(note.getNoteId(), note.getTitle(), note.getDescription(), note.getUserId()));
     }
+    public int deleteNote(int noteId) {
+        return noteMapper.deleteNote(noteId);
+    }
 //
 //    public boolean isUsernameAvailable(String username) {
 //        return userMapper.getUser(username) == null;
