@@ -99,29 +99,32 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="modal fade" id="deleteNoteModal" tabindex="-1" role="dialog" aria-labelledby="deleteNoteModal" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="deleteNoteModal-header">Delete a Note</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Do you want to delete <input type="hidden" name="delete-note-id" id="delete-note-id"> note?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <form action="#" th:action="@{/notes}" th:method="delete">
-                                        <button type="button" id= "deleteNoteSubmit" class="btn btn-primary">
-<!--                                                onclick="$('#deleteNoteSubmit').click();"-->
-                                        Delete</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <div th:insert="fragments/delete-note :: delete-note"></div>
+                        <div th:insert="fragments/edit-note :: edit-note"></div>
+<!--                        <div class="modal fade" id="deleteNoteModal" tabindex="-1" role="dialog" aria-labelledby="deleteNoteModal" aria-hidden="true">-->
+<!--                            <div class="modal-dialog" role="document">-->
+<!--                                <div class="modal-content">-->
+<!--                                    <div class="modal-header">-->
+<!--                                        <h5 class="modal-title" id="deleteNoteModal-header">Delete a Note</h5>-->
+<!--                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                                            <span aria-hidden="true">&times;</span>-->
+<!--                                        </button>-->
+<!--                                    </div>-->
+<!--                                    <div class="modal-body">-->
+<!--                                        <form action="#" th:action="@{/notes}" th:method="delete">-->
+<!--                                            Do you want to delete note?-->
+<!--                                            <input type="hidden" name="noteId" id="delete-note-id">-->
+<!--                                            <button type="submit" id= "deleteNoteSubmit" class="btn btn-primary">-->
+<!--                                                Delete</button>-->
+<!--                                        </form>-->
+
+<!--                                    </div>-->
+<!--                                    <div class="modal-footer">-->
+<!--                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
 
                         <div class="modal fade" id="editNoteModal" tabindex="-1" role="dialog" aria-labelledby="editNoteModal" aria-hidden="true">
                             <div class="modal-dialog" role="document">
@@ -134,7 +137,7 @@
                                     </div>
                                     <div class="modal-body">
                                         <form action="#" th:action="@{/notes}" th:method="PUT">
-                                            <input type="hidden" name="edit-note-id" id="edit-note-id">
+                                            <input type="hidden" name="noteId" id="edit-note-id">
                                             <div class="form-group">
                                                 <label for="edit-note-title" class="col-form-label">Title</label>
                                                 <input type="text" name= "title" class="form-control" id="edit-note-title" maxlength="20" required>
@@ -153,37 +156,7 @@
                                 </div>
                             </div>
                             </div>
-
-                        <div class="modal fade" id="noteModal" tabindex="-1" role="dialog" aria-labelledby="noteModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="noteModalLabel">Note</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form action="#" th:action="@{/notes}" method="POST">
-                                            <input type="hidden" name="noteId" id="note-id">
-                                            <div class="form-group">
-                                                <label for="note-title" class="col-form-label">Title</label>
-                                                <input type="text" name= "title" class="form-control" id="note-title" maxlength="20" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="note-description" class="col-form-label">Description</label>
-                                                <textarea class="form-control" name="description" id="note-description" rows="5" maxlength="1000" required></textarea>
-                                            </div>
-                                            <button id="noteSubmit" type="submit" class="d-none"></button>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary" onclick="$('#noteSubmit').click();">Save changes</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <div th:insert="fragments/create-note :: create-note"></div>
                     </div>
                     <div class="tab-pane fade" id="nav-credentials" role="tabpanel" aria-labelledby="nav-credentials-tab">
                         <button style="margin: 0.25em;" type="button" class="btn btn-info float-right" onclick="showCredentialModal()">
@@ -213,41 +186,7 @@
                                 </tbody>
                             </table>
                         </div>
-
-                        <div class="modal fade" id="credentialModal" tabindex="-1" role="dialog" aria-labelledby="credentialModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="credentialModalLabel">Credential</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form action="#" method="POST">
-                                            <input type="hidden" name="credentialId" id="credential-id">
-                                            <div class="form-group">
-                                                <label for="note-title" class="col-form-label">URL</label>
-                                                <input type="text" name= "url" class="form-control" id="credential-url" maxlength="100" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="note-title" class="col-form-label">Username</label>
-                                                <input type="text" name= "username" class="form-control" id="credential-username" maxlength="30" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="note-title" class="col-form-label">Password</label>
-                                                <input type="text" name= "password" class="form-control" id="credential-password" maxlength="30" required>
-                                            </div>
-                                            <button id="credentialSubmit" type="submit" class="d-none"></button>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary" onclick="$('#credentialSubmit').click();">Save changes</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <div th:insert="fragments/create-credential :: create-credential"></div>
                     </div>
                 </div>
             </div>
@@ -275,7 +214,7 @@
                 $('#editNoteModal').modal('show');
             }
             function showDeleteNoteModal(noteId) {
-                $('#edit-note-id').val(noteId ? noteId : '');
+                $('#delete-note-id').val(noteId ? noteId : '');
 <!--                $('#edit-note-title').val(noteTitle ? noteTitle : '');-->
 <!--                $('#edit-note-description').val(noteDescription ? noteDescription : '');-->
                 $('#deleteNoteModal').modal('show');

@@ -29,12 +29,4 @@ public class NoteService {
     public int deleteNote(int noteId) {
         return noteMapper.deleteNote(noteId);
     }
-//
-//    public boolean isUsernameAvailable(String username) {
-//        return userMapper.getUser(username) == null;
-//    }
-//
-//    public User getUser(String username) {
-//        return userMapper.getUser(username);
-//    }
 }
