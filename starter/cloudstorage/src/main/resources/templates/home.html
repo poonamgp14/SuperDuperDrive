@@ -125,10 +125,12 @@
                                     <td>
                                         <button type="button" class="btn btn-success"
                                                 th:credential-url="${credential.getUrl()}"
+                                                th:credential-key="${credential.getKey()}"
                                                 th:credential-username="${credential.getUsername()}"
                                                 th:credential-password="${encryptionService.decryptValue(credential.getPassword(),credential.getKey())}"
                                                 th:credential-id="${credential.getCredentialId()}"
                                                 onclick="showEditCredentialModal(this.getAttribute('credential-id'),
+                                                    this.getAttribute('credential-key'),
                                                     this.getAttribute('credential-url'),
                                                     this.getAttribute('credential-username'),
                                                     this.getAttribute('credential-password'))"
@@ -191,9 +193,11 @@
                 $('#credentialModal').modal('show');
             }
 
-            function showEditCredentialModal(credentialId, url, username, password){
+            function showEditCredentialModal(credentialId, key,url, username, password){
                 console.log('i m in creds')
+                console.log(key)
                 $('#edit-credential-id').val(credentialId ? credentialId : '');
+                $('#edit-credential-key').val(key ? key : '');
                 $('#edit-credential-url').val(url ? url : '');
                 $('#edit-credential-username').val(username ? username : '');
                 $('#edit-credential-password').val(password ? password : '');

@@ -41,7 +41,8 @@ public class CredentialController {
         random.nextBytes(key);
         String encodedKey = Base64.getEncoder().encodeToString(key);
         credential.setKey(encodedKey);
-        String encryptedPassword = encryptionService.encryptValue(credential.getPassword(), encodedKey);
+        System.out.println(credential.getKey());
+        String encryptedPassword = encryptionService.encryptValue(credential.getPassword(), credential.getKey());
         credential.setPassword(encryptedPassword);
 //        String decryptedPassword = encryptionService.decryptValue(encryptedPassword, encodedKey);
         int rowsAdded = credentialService.createCredential(credential);
@@ -65,10 +66,9 @@ public class CredentialController {
         User user = userService.getUser(authentication.getName());
         Integer userId = user.getUserId();
         credential.setUserId(userId);
-//        System.out.println(credential.getDecryptedPassword());
-        System.out.println(model.getAttribute("credential-password"));
-//        String encryptedPassword = encryptionService.encryptValue(credential.getPassword(), credential.getKey());
-//        credential.setPassword(encryptedPassword);
+//        System.out.println(model.getAttribute("credential-password"));
+        String encryptedPassword = encryptionService.encryptValue(credential.getPassword(), credential.getKey());
+        credential.setPassword(encryptedPassword);
         int rowsUpdated = credentialService.updateCredential(credential);
         if (rowsUpdated < 0){
             this.credentialError = "There was an error for updating a credential. Please try again";
