@@ -126,7 +126,7 @@
                                         <button type="button" class="btn btn-success"
                                                 th:credential-url="${credential.getUrl()}"
                                                 th:credential-username="${credential.getUsername()}"
-                                                th:credential-password="${encryptionService.decryptValue(credential.getPassword(),credential.getKey())}"
+                                                th:credential-password="${credential.getPassword()}"
                                                 th:credential-id="${credential.getCredentialId()}"
                                                 onclick="showEditCredentialModal(this.getAttribute('credential-id'),
                                                     this.getAttribute('credential-url'),
