@@ -91,7 +91,9 @@
                                                     this.getAttribute('note-title'),
                                                     this.getAttribute('note-description'))"
                                             >Edit</button>
-                                            <button type="button" class="btn btn-danger" th:note-id="${note.getNoteId()}" onclick="showDeleteNoteModal(this.getAttribute('note-id'))">Delete</button>
+                                            <button type="button" class="btn btn-danger"
+                                                    th:note-id="${note.getNoteId()}"
+                                                    onclick="showDeleteNoteModal(this.getAttribute('note-id'))">Delete</button>
                                         </td>
                                         <th th:text="${note.getTitle()}" scope="row">Example Note Title</th>
                                         <td th:text="${note.getDescription()}">Example Note Description </td>
@@ -118,20 +120,34 @@
                                         <th style="width: 25%" scope="col">Password</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody th:each="credential:${credentials}">
                                 <tr>
                                     <td>
-                                        <button type="button" class="btn btn-success">Edit</button>
-                                        <a class="btn btn-danger">Delete</a>
+                                        <button type="button" class="btn btn-success"
+                                                th:credential-url="${credential.getUrl()}"
+                                                th:credential-username="${credential.getUsername()}"
+                                                th:credential-password="${encryptionService.decryptValue(credential.getPassword(),credential.getKey())}"
+                                                th:credential-id="${credential.getCredentialId()}"
+                                                onclick="showEditCredentialModal(this.getAttribute('credential-id'),
+                                                    this.getAttribute('credential-url'),
+                                                    this.getAttribute('credential-username'),
+                                                    this.getAttribute('credential-password'))"
+                                        >Edit</button>
+                                        <a class="btn btn-danger"
+                                           th:credential-id="${credential.getCredentialId()}"
+                                           onclick="showDeleteCredentialModal(this.getAttribute('credential-id'))"
+                                        >Delete</a>
                                     </td>
-                                    <th scope="row">Example Credential URL</th>
-                                    <td>Example Credential Username</td>
-                                    <td>Example Credential Password</td>
+                                    <th th:text="${credential.getUrl()}" scope="row">Example Credential URL</th>
+                                    <td th:text="${credential.getUsername()}">Example Credential Username</td>
+                                    <td th:text="${credential.getPassword()}">Example Credential Password</td>
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div th:insert="fragments/create-credential :: create-credential"></div>
+                        <div th:insert="fragments/edit-credential :: edit-credential"></div>
+                        <div th:insert="fragments/delete-credential :: delete-credential"></div>
                     </div>
                 </div>
             </div>
@@ -167,11 +183,26 @@
 
             // For opening the credentials modal
             function showCredentialModal(credentialId, url, username, password) {
+                console.log('i m in creds')
                 $('#credential-id').val(credentialId ? credentialId : '');
                 $('#credential-url').val(url ? url : '');
                 $('#credential-username').val(username ? username : '');
                 $('#credential-password').val(password ? password : '');
                 $('#credentialModal').modal('show');
+            }
+
+            function showEditCredentialModal(credentialId, url, username, password){
+                console.log('i m in creds')
+                $('#edit-credential-id').val(credentialId ? credentialId : '');
+                $('#edit-credential-url').val(url ? url : '');
+                $('#edit-credential-username').val(username ? username : '');
+                $('#edit-credential-password').val(password ? password : '');
+                $('#editCredentialModal').modal('show');
+            }
+
+            function showDeleteCredentialModal(credentialId){
+                $('#delete-credential-id').val(credentialId ? credentialId : '');
+                $('#deleteCredentialModal').modal('show');
             }
         </script>
     </body>

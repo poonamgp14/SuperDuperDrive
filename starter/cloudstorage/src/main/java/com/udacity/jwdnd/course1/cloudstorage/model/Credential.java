@@ -40,5 +40,11 @@ public class Credential {
 
     public String getPassword() { return password;
     }
+    public void setKey(String key) {
+        this.key = key;
+    }
+    public void setPassword(String password) {
+        this.password= password;
+    }
 }
 
