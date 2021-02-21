@@ -7,7 +7,7 @@ import com.udacity.jwdnd.course1.cloudstorage.services.EncryptionService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.SecureRandom;
@@ -19,8 +19,10 @@ public class CredentialController {
     private final CredentialService credentialService;
     private final UserService userService;
     private final EncryptionService encryptionService;
-    public String credentialError = null;
-    public String credentialSuccess = null;
+    public String ifError = null;
+    public String ifSuccess = null;
+    public String successMessage = null;
+    public String errorMessage = null;
 
     public CredentialController(CredentialService credentialService, UserService userService, EncryptionService encryptionService) {
         this.credentialService = credentialService;
@@ -29,10 +31,11 @@ public class CredentialController {
     }
 
     @PostMapping
-    public String createCredential(@ModelAttribute Credential credential, Authentication authentication, Model model){
-        System.out.println("i m in create cred");
-        this.credentialError = null;
-        this.credentialSuccess = null;
+    public String createCredential(@ModelAttribute Credential credential, Authentication authentication, RedirectAttributes redirectAttributes){
+        this.ifError = null;
+        this.ifSuccess = null;
+        this.errorMessage = null;
+        this.successMessage = null;
         User user = userService.getUser(authentication.getName());
         Integer userId = user.getUserId();
         credential.setUserId(userId);
@@ -47,22 +50,25 @@ public class CredentialController {
 //        String decryptedPassword = encryptionService.decryptValue(encryptedPassword, encodedKey);
         int rowsAdded = credentialService.createCredential(credential);
         if (rowsAdded < 0){
-            this.credentialError = "There was an error for adding a credential. Please try again";
+            this.errorMessage = "There was an error for adding a credential. Please try again";
         }
-        if (this.credentialError == null) {
-            model.addAttribute("credentialSuccess", "You successfully added a new note");
+        if (this.ifError == null) {
+            redirectAttributes.addFlashAttribute("ifSuccess",true);
+            redirectAttributes.addFlashAttribute("successMessage", "You successfully added a new credential");
         } else {
-            model.addAttribute("credentialError", this.credentialError);
+            redirectAttributes.addFlashAttribute("ifError", true);
+            redirectAttributes.addFlashAttribute("errorMessage",this.errorMessage);
         }
 
         return "redirect:/home";
     }
 
     @PutMapping
-    public String updateCredential(@ModelAttribute Credential credential, Authentication authentication, Model model){
-        System.out.println("i m in update note");
-        this.credentialError = null;
-        this.credentialSuccess = null;
+    public String updateCredential(@ModelAttribute Credential credential, Authentication authentication, RedirectAttributes redirectAttributes){
+        this.ifError = null;
+        this.ifSuccess = null;
+        this.errorMessage = null;
+        this.successMessage = null;
         User user = userService.getUser(authentication.getName());
         Integer userId = user.getUserId();
         credential.setUserId(userId);
@@ -71,33 +77,38 @@ public class CredentialController {
         credential.setPassword(encryptedPassword);
         int rowsUpdated = credentialService.updateCredential(credential);
         if (rowsUpdated < 0){
-            this.credentialError = "There was an error for updating a credential. Please try again";
+            this.errorMessage = "There was an error for updating a credential. Please try again";
         }
-        if (this.credentialError == null) {
-            model.addAttribute("credentialSuccess", "You successfully updated a note");
+        if (this.ifError == null) {
+            redirectAttributes.addFlashAttribute("ifSuccess",true);
+            redirectAttributes.addFlashAttribute("successMessage", "You successfully updated a credential");
         } else {
-            model.addAttribute("credentialError", this.credentialError);
+            redirectAttributes.addFlashAttribute("ifError", true);
+            redirectAttributes.addFlashAttribute("errorMessage",this.errorMessage);
         }
 
         return "redirect:/home";
     }
 
     @DeleteMapping
-    public String deleteCredential(@ModelAttribute Credential credential, Authentication authentication, Model model){
-        System.out.println("i m in delete note");
-        this.credentialError = null;
-        this.credentialSuccess = null;
+    public String deleteCredential(@ModelAttribute Credential credential, Authentication authentication, RedirectAttributes redirectAttributes){
+        this.ifError = null;
+        this.ifSuccess = null;
+        this.errorMessage = null;
+        this.successMessage = null;
         User user = userService.getUser(authentication.getName());
         Integer userId = user.getUserId();
         credential.setUserId(userId);
         int rowsUpdated = credentialService.deleteCredential(credential.getCredentialId());
         if (rowsUpdated < 0){
-            this.credentialError = "There was an error deleting a credential. Please try again";
+            this.errorMessage = "There was an error for deleting a credential. Please try again";
         }
-        if (this.credentialError == null) {
-            model.addAttribute("credentialSuccess", "You successfully deleted a credential");
+        if (this.ifError == null) {
+            redirectAttributes.addFlashAttribute("ifSuccess",true);
+            redirectAttributes.addFlashAttribute("successMessage", "You successfully deleted a credential");
         } else {
-            model.addAttribute("credentialError", this.credentialError);
+            redirectAttributes.addFlashAttribute("ifError", true);
+            redirectAttributes.addFlashAttribute("errorMessage",this.errorMessage);
         }
 
         return "redirect:/home";

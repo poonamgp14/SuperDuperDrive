@@ -48,6 +48,7 @@ public class FileController {
 
         User user = this.userService.getUser(authentication.getName());
         Integer userId = user.getUserId();
+
         if (fileService.isFilenameAvailable(multipartFile.getOriginalFilename(), userId)) {
 
             redirectAttributes.addFlashAttribute("ifSuccess", false);
@@ -60,27 +61,30 @@ public class FileController {
             redirectAttributes.addFlashAttribute("ifSuccess", true);
             redirectAttributes.addFlashAttribute("successMessage", "New File added successfully");
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             redirectAttributes.addFlashAttribute("ifError", true);
             redirectAttributes.addFlashAttribute("errorMessage", "System error!" + e.getMessage());
         }
         return "redirect:/home";
     }
 
-//    @PostMapping("/files/delete")
-//    public ModelAndView deleteFile(@ModelAttribute File fileDelete, Authentication authentication, Model model) {
-//        AppUser appUser = this.appUserService.getUser(authentication.getName());
-//        Integer userid = appUser.getUserid();
-//
-//        try {
-//            fileService.deleteFile(fileDelete, userid);
-//            model.addAttribute("success", true);
-//            model.addAttribute("message", "file Deleted");
-//        } catch (Exception e) {
-//            model.addAttribute("error", true);
-//            model.addAttribute("message", "System error!" + e.getMessage());
-//        }
-//        return new ModelAndView("result");
-//    }
+    @DeleteMapping
+    public String deleteFile(@ModelAttribute File file, Authentication authentication,RedirectAttributes redirectAttributes ) {
+        System.out.println("i m in delete cont");
+        System.out.println(file.getFileId());
+//        User user = this.userService.getUser(authentication.getName());
+//        Integer userId = user.getUserId();
+
+        try {
+            fileService.deleteFile(file.getFileId());
+            redirectAttributes.addFlashAttribute("ifSuccess", true);
+            redirectAttributes.addFlashAttribute("successMessage", "file Deleted");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("ifError", true);
+            redirectAttributes.addFlashAttribute("errorMessage", "System error!" + e.getMessage());
+        }
+        return "redirect:/home";
+    }
 //
 //    @GetMapping("/download/{fileId}")
 //    public ResponseEntity<Resource> download(@PathVariable("fileId") Integer fileId) {

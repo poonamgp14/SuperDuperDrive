@@ -18,13 +18,14 @@ public class FileService {
     }
 
     public int createFile(MultipartFile uploadFile, Integer userid) throws IOException {
+        System.out.println("i m in service");
         File file = new File();
         file.setFileName(uploadFile.getOriginalFilename());
         file.setContentType(uploadFile.getContentType());
         file.setFileData(uploadFile.getBytes());
         file.setFileSize(uploadFile.getSize());
-        file.setUserid(userid);
-
+        file.setUserId(userid);
+        System.out.println("i m going to mapper");
         return fileMapper.insert(file);
     }
 
@@ -33,6 +34,8 @@ public class FileService {
     }
 
     public List<File> getAllFilesByUserId(Integer id) {
+        System.out.println(this.fileMapper.getAllFilesByUserId(id));
+//        System.out.println(this.fileMapper.getAllFilesByUserId(id));
         return this.fileMapper.getAllFilesByUserId(id);
     }
 
@@ -40,9 +43,11 @@ public class FileService {
         return this.fileMapper.getFileId(id);
     }
 
-   public int deleteFile(File file, Integer userid) {
-        file.setUserid(userid);
-        return fileMapper.delete(file);
+   public int deleteFile(Integer fileId) {
+       System.out.println("i m in delete service n going to mapper");
+       System.out.println(fileId);
+//        file.setUserId(userId);
+        return fileMapper.delete(fileId);
    }
 
     public boolean isFilenameAvailable(String fileName, Integer userId) {

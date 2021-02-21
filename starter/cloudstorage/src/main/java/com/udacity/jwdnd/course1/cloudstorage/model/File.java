@@ -37,9 +37,6 @@ public class File {
         this.userId = userId;
     }
 
-    public void setUserid(Integer userid) {
-    }
-
     public void setFileSize(long size) { this.fileSize = size;}
 
     public void setContentType(String contentType) { this.contentType = contentType; }

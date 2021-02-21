@@ -6,16 +6,18 @@ import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/notes")
 public class NoteController {
     private final NoteService noteService;
     private final UserService userService;
-    public String noteError = null;
-    public String noteSuccess = null;
+    public String ifError = null;
+    public String ifSuccess = null;
+    public String successMessage = null;
+    public String errorMessage = null;
 
     public NoteController(NoteService noteService, UserService userService) {
         this.noteService = noteService;
@@ -23,62 +25,72 @@ public class NoteController {
     }
 
     @PostMapping
-    public String createNote(@ModelAttribute Note note, Authentication authentication, Model model){
-        this.noteError = null;
-        this.noteSuccess = null;
+    public String createNote(@ModelAttribute Note note, Authentication authentication, RedirectAttributes redirectAttributes){
+        this.ifError = null;
+        this.ifSuccess = null;
+        this.errorMessage = null;
+        this.successMessage = null;
         User user = userService.getUser(authentication.getName());
         Integer userId = user.getUserId();
         note.setUserId(userId);
         int rowsAdded = noteService.createNote(note);
         if (rowsAdded < 0){
-            this.noteError = "There was an error for adding a note. Please try again";
+            this.errorMessage = "There was an error for adding a note. Please try again";
         }
-        if (this.noteError == null) {
-            model.addAttribute("noteSuccess", "You successfully added a new note");
+        if (this.ifError == null) {
+            redirectAttributes.addFlashAttribute("ifSuccess",true);
+            redirectAttributes.addFlashAttribute("successMessage", "You successfully added a new note");
         } else {
-            model.addAttribute("noteError", this.noteError);
+            redirectAttributes.addFlashAttribute("ifError", true);
+            redirectAttributes.addFlashAttribute("errorMessage",this.errorMessage);
         }
 
         return "redirect:/home";
     }
 
     @PutMapping
-    public String updateNote(@ModelAttribute Note note, Authentication authentication, Model model){
-        System.out.println("i m in update note");
-        this.noteError = null;
-        this.noteSuccess = null;
+    public String updateNote(@ModelAttribute Note note, Authentication authentication, RedirectAttributes redirectAttributes){
+        this.ifError = null;
+        this.ifSuccess = null;
+        this.errorMessage = null;
+        this.successMessage = null;
         User user = userService.getUser(authentication.getName());
         Integer userId = user.getUserId();
         note.setUserId(userId);
         int rowsUpdated = noteService.updateNote(note);
         if (rowsUpdated < 0){
-            this.noteError = "There was an error for updating a note. Please try again";
+            this.errorMessage = "There was an error for updating a note. Please try again";
         }
-        if (this.noteError == null) {
-            model.addAttribute("noteSuccess", "You successfully updated a note");
+        if (this.ifError == null) {
+            redirectAttributes.addFlashAttribute("ifSuccess",true);
+            redirectAttributes.addFlashAttribute("successMessage", "You successfully updated a note");
         } else {
-            model.addAttribute("noteError", this.noteError);
+            redirectAttributes.addFlashAttribute("ifError", true);
+            redirectAttributes.addFlashAttribute("errorMessage",this.errorMessage);
         }
 
         return "redirect:/home";
     }
 
     @DeleteMapping
-    public String deleteNote(@ModelAttribute Note note, Authentication authentication, Model model){
-        System.out.println("i m in delete note");
-        this.noteError = null;
-        this.noteSuccess = null;
+    public String deleteNote(@ModelAttribute Note note, Authentication authentication, RedirectAttributes redirectAttributes){
+        this.ifError = null;
+        this.ifSuccess = null;
+        this.errorMessage = null;
+        this.successMessage = null;
         User user = userService.getUser(authentication.getName());
         Integer userId = user.getUserId();
         note.setUserId(userId);
         int rowsUpdated = noteService.deleteNote(note.getNoteId());
         if (rowsUpdated < 0){
-            this.noteError = "There was an error deleting a note. Please try again";
+            this.errorMessage = "There was an error for deleting a note. Please try again";
         }
-        if (this.noteError == null) {
-            model.addAttribute("noteSuccess", "You successfully deleted a note");
+        if (this.ifError == null) {
+            redirectAttributes.addFlashAttribute("ifSuccess",true);
+            redirectAttributes.addFlashAttribute("successMessage", "You successfully deleted a note");
         } else {
-            model.addAttribute("noteError", this.noteError);
+            redirectAttributes.addFlashAttribute("ifError", true);
+            redirectAttributes.addFlashAttribute("errorMessage",this.errorMessage);
         }
 
         return "redirect:/home";

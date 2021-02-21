@@ -33,9 +33,6 @@ public class EncryptionService {
     }
 
     public String decryptValue(String data, String key) {
-        System.out.println("i m in decryptvalue");
-        System.out.println(data);
-        System.out.println(key);
         byte[] decryptedValue = null;
 
         try {
