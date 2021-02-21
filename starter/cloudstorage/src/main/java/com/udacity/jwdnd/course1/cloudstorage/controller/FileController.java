@@ -85,20 +85,22 @@ public class FileController {
         }
         return "redirect:/home";
     }
-//
-//    @GetMapping("/download/{fileId}")
-//    public ResponseEntity<Resource> download(@PathVariable("fileId") Integer fileId) {
-//        File file = fileService.getFileById(fileId);
-//        HttpHeaders httpHeaders = new HttpHeaders();
-//        httpHeaders.add(httpHeaders.CONTENT_DISPOSITION, "attachment; filename = " + file.getFilename());
-//        httpHeaders.add("Cache-control", "no-cache, no-store, must-revalidate");
-//        httpHeaders.add("Pragma", "no-cache");
-//        httpHeaders.add("Expires", "0");
-//        ByteArrayResource resource = new ByteArrayResource(file.getFiledata());
-//        return ResponseEntity.ok()
-//                .headers(httpHeaders)
-//                .body(resource);
-//
-//    }
+
+    @GetMapping("/download/{fileId}")
+    public ResponseEntity<Resource> download(@PathVariable("fileId") Integer fileId) {
+        System.out.println("i m in download cont");
+        System.out.println(fileId);
+        File file = fileService.getFileById(fileId);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(httpHeaders.CONTENT_DISPOSITION, "attachment; filename = " + file.getFilename());
+        httpHeaders.add("Cache-control", "no-cache, no-store, must-revalidate");
+        httpHeaders.add("Pragma", "no-cache");
+        httpHeaders.add("Expires", "0");
+        ByteArrayResource resource = new ByteArrayResource(file.getFiledata());
+        return ResponseEntity.ok()
+                .headers(httpHeaders)
+                .body(resource);
+
+    }
 }
 

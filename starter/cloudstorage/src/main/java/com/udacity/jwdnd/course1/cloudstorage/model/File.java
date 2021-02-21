@@ -45,15 +45,10 @@ public class File {
 
     public void setFileData(byte[] bytes) { this.fileData = bytes; }
 
-//    public String getFileSize() { return fileSize;
-//    }
-//
-//    public String getFileData() { return fileData;
-//    }
-//    public void setKey(String key) {
-//        this.key = key;
-//    }
-//    public void setPassword(String password) {
-//        this.password= password;
-//    }
+    public byte[] getFiledata() { return fileData;
+    }
+
+    public String getFilename() { return fileName;
+    }
+
 }

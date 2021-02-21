@@ -29,9 +29,9 @@ public class FileService {
         return fileMapper.insert(file);
     }
 
-    public int uploadFile(File file) {
-        return fileMapper.insert(file);
-    }
+//    public int uploadFile(File file) {
+//        return fileMapper.insert(file);
+//    }
 
     public List<File> getAllFilesByUserId(Integer id) {
         System.out.println(this.fileMapper.getAllFilesByUserId(id));
