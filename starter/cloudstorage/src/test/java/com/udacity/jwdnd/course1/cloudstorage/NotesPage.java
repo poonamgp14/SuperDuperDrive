@@ -46,13 +46,16 @@ public class NotesPage {
 	@FindBy(css="#deleteNoteSubmit")
 	private WebElement deleteSubmit;
 
-	public NotesPage(WebDriver webDriver) { PageFactory.initElements(webDriver, this);}
+	public NotesPage(WebDriver webDriver) {
+		PageFactory.initElements(webDriver, this);
+	}
 
 	public void openNoteTabJS() {
 		this.notesTabField.click();
 	}
 
 	public void  addNote(String title, String description){
+		this.openNoteTabJS();
 		this.addButton.click();
 		this.noteTitle.sendKeys(title);
 		this.noteDescription.sendKeys(description);
