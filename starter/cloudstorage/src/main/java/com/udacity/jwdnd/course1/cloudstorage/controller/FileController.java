@@ -10,10 +10,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -68,15 +66,11 @@ public class FileController {
         return "redirect:/home";
     }
 
-    @DeleteMapping
-    public String deleteFile(@ModelAttribute File file, Authentication authentication,RedirectAttributes redirectAttributes ) {
-        System.out.println("i m in delete cont");
-        System.out.println(file.getFileId());
-//        User user = this.userService.getUser(authentication.getName());
-//        Integer userId = user.getUserId();
+    @GetMapping("/deleteFile/{id}")
+    public String deleteFile(@PathVariable("id") Integer id,RedirectAttributes redirectAttributes ) {
 
         try {
-            fileService.deleteFile(file.getFileId());
+            fileService.deleteFile(id);
             redirectAttributes.addFlashAttribute("ifSuccess", true);
             redirectAttributes.addFlashAttribute("successMessage", "file Deleted");
         } catch (Exception e) {
@@ -88,8 +82,6 @@ public class FileController {
 
     @GetMapping("/download/{fileId}")
     public ResponseEntity<Resource> download(@PathVariable("fileId") Integer fileId) {
-        System.out.println("i m in download cont");
-        System.out.println(fileId);
         File file = fileService.getFileById(fileId);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(httpHeaders.CONTENT_DISPOSITION, "attachment; filename = " + file.getFilename());
