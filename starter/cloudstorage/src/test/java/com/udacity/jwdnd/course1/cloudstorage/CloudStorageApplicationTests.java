@@ -3,12 +3,20 @@ package com.udacity.jwdnd.course1.cloudstorage;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class CloudStorageApplicationTests {
 
 	@LocalServerPort
@@ -18,16 +26,18 @@ class CloudStorageApplicationTests {
 
 	public String baseURL;
 
+	public String username = "pgupta";
+	public String password = "hexagon123";
+
 	@BeforeAll
 	static void beforeAll() {
 		WebDriverManager.chromedriver().setup();
-//		this.driver = new ChromeDriver();
 	}
 
 	@BeforeEach
 	public void beforeEach() {
 		this.baseURL = "http://localhost:" + this.port;
-//		System.setProperty("webdriver.chrome.driver", "/usr/lib/chromium-browser/chromedriver");
+		System.setProperty("webdriver.chrome.driver", "/usr/lib/chromium-browser/chromedriver");
 		this.driver = new ChromeDriver();
 	}
 
@@ -38,24 +48,28 @@ class CloudStorageApplicationTests {
 		}
 	}
 
-	@Test
-	public void testUserSignupLoginPage() {
-		String username = "pgupta";
-		String password = "hexagon123";
+	// Perform signup process
+	public void signup() {
 		String fName = "Poonam";
 		String lName = "Gupta";
-
 		driver.get(this.baseURL + "/signup");
-
 		SignupPage signupPage = new SignupPage(driver);
-		signupPage.signup(fName, lName,username, password);
+		signupPage.signup(fName, lName,this.username, this.password);
+	}
 
+	//Perform login process
+	public void login(){
 		driver.get(this.baseURL + "/login");
-
 		LoginPage loginPage = new LoginPage(driver);
-		loginPage.login(username, password);
+		loginPage.login(this.username, this.password);
+	}
+
+	@Test
+	public void testUserSignupLoginPage() {
+		signup();
+		login();
 		driver.get(this.baseURL + "/login?logout");
-		Assertions.assertEquals("You have been logged out", driver.findElement(By.id("logout-msg")).getText());
+		 Assertions.assertEquals("You have been logged out", driver.findElement(By.id("logout-msg")).getText());
 
 	}
 
@@ -91,31 +105,90 @@ class CloudStorageApplicationTests {
 
 	@Test
 	public void createNoteTest() {
-		testUserSignupLoginPage();
+		signup();
+		login();
+		NotesPage notesPage = new NotesPage(driver);
+		createNote(notesPage, "Note title", "Note description");
+		Assertions.assertEquals("You successfully added a new note", driver.findElement(By.id("success-msg")).getText());
+		driver.get(this.baseURL + "/home");
+		notesPage.openNoteTabJS();
+		Assertions.assertEquals("Note title",  driver.findElement(By.id("table-noteTitle")).getAttribute("innerHTML"));
+	}
+
+	@Test
+	public void editNoteTest() {
+		signup();
+		login();
 		NotesPage notesPage = new NotesPage(driver);
 		createNote(notesPage, "Note title", "Note description");
 		Assertions.assertEquals("You successfully added a new note", driver.findElement(By.id("success-msg")).getText());
 		driver.get("http://localhost:" + this.port + "/home");
 		notesPage.openNoteTabJS();
-		Assertions.assertEquals("Note title",  driver.findElement(By.id("table-noteTitle")).getText());
+		notesPage.editNote("note Title edited", "Edited note description");
+		driver.get("http://localhost:" + this.port + "/home");
+		notesPage.openNoteTabJS();
+		Assertions.assertEquals("note Title edited",  driver.findElement(By.id("table-noteTitle")).getAttribute("innerHTML"));
 	}
 
-//	@Test
-//	public void editNoteTest() {
-//		testUserSignupLoginPage();
-//		NotesPage notesPage = new NotesPage(driver);
-//		createNote(notesPage, "Note title", "Note description");
-//		Assertions.assertEquals("You successfully added a new note", driver.findElement(By.id("success-msg")).getText());
-//		driver.get("http://localhost:" + this.port + "/home");
-//		notesPage.openNoteTabJS();
-//		notesPage.editNoteJS();
-//		notePage.createNoteJS("noteTitle", "Edited note description");
-//		notePage.saveNoteJS();
-//		Assertions.assertEquals("Result", driver.getTitle());
-//		Assertions.assertEquals("New note added !", resultPage.getSuccessMessage());
-//		driver.get("http://localhost:" + this.port + "/home");
-//		notePage.openNoteTabJS();
-//		Assertions.assertEquals("noteTitle", notePage.getTableNoteTitle());
-//	}
+	@Test
+	public void deleteNoteTest() {
+		signup();
+		login();
+		NotesPage notesPage = new NotesPage(driver);
+		createNote(notesPage, "Note title", "Note description");
+		Assertions.assertEquals("You successfully added a new note", driver.findElement(By.id("success-msg")).getText());
+		driver.get("http://localhost:" + this.port + "/home");
+		notesPage.openNoteTabJS();
+		notesPage.deleteNote();
+		driver.get("http://localhost:" + this.port + "/home");
+		notesPage.openNoteTabJS();
+		Assertions.assertEquals(false, notesPage.hasNotes());
+	}
+
+	public void createCredential(CredentialsPage credentialsPage, String url, String username ,String password) {
+		credentialsPage.addCredential(url, username, password);
+	}
+
+	@Test
+	public void createCredentialTest() {
+		signup();
+		login();
+		CredentialsPage credentialsPage = new CredentialsPage(driver);
+		createCredential(credentialsPage, "httpabc", "pgupta", "12345");
+		Assertions.assertEquals("You successfully added a new credential", driver.findElement(By.id("success-msg")).getText());
+		driver.get(this.baseURL + "/home");
+		credentialsPage.openCredentialTabJS();
+		Assertions.assertEquals("httpabc",  driver.findElement(By.id("table-credentialUrl")).getAttribute("innerHTML"));
+	}
+
+	@Test
+	public void editcredentialTest() {
+		signup();
+		login();
+		CredentialsPage credentialsPage = new CredentialsPage(driver);
+		createCredential(credentialsPage, "httpabc", "pgupta", "12345");
+		Assertions.assertEquals("You successfully added a new credential", driver.findElement(By.id("success-msg")).getText());
+		driver.get("http://localhost:" + this.port + "/home");
+		credentialsPage.openCredentialTabJS();
+		credentialsPage.editCredential("edited url", "Edited username", "Edited password");
+		driver.get("http://localhost:" + this.port + "/home");
+		credentialsPage.openCredentialTabJS();
+		Assertions.assertEquals("edited url",  driver.findElement(By.id("table-credentialUrl")).getAttribute("innerHTML"));
+	}
+
+	@Test
+	public void deleteCredentialTest() {
+		signup();
+		login();
+		CredentialsPage credentialsPage = new CredentialsPage(driver);
+		createCredential(credentialsPage, "httpabc", "pgupta", "12345");
+		Assertions.assertEquals("You successfully added a new credential", driver.findElement(By.id("success-msg")).getText());
+		driver.get("http://localhost:" + this.port + "/home");
+		credentialsPage.openCredentialTabJS();
+		credentialsPage.deleteCredential();
+		driver.get("http://localhost:" + this.port + "/home");
+		credentialsPage.openCredentialTabJS();
+		Assertions.assertEquals(false, credentialsPage.hasCredentials());
+	}
 
 }
