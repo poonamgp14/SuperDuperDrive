@@ -17,6 +17,7 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 class CloudStorageApplicationTests {
 
 	@LocalServerPort
@@ -37,7 +38,7 @@ class CloudStorageApplicationTests {
 	@BeforeEach
 	public void beforeEach() {
 		this.baseURL = "http://localhost:" + this.port;
-//		System.setProperty("webdriver.chrome.driver", "/usr/lib/chromium-browser/chromedriver");
+		System.setProperty("webdriver.chrome.driver", "/usr/lib/chromium-browser/chromedriver");
 		this.driver = new ChromeDriver();
 	}
 
@@ -62,14 +63,6 @@ class CloudStorageApplicationTests {
 		driver.get(this.baseURL + "/login");
 		LoginPage loginPage = new LoginPage(driver);
 		loginPage.login(this.username, this.password);
-	}
-
-	@Test
-	public void testUserSignupLoginPage() {
-		signup();
-		login();
-		driver.get(this.baseURL + "/login?logout");
-		 Assertions.assertEquals("You have been logged out", driver.findElement(By.id("logout-msg")).getText());
 
 	}
 
@@ -91,6 +84,19 @@ class CloudStorageApplicationTests {
 	public void getHomePage() {
 		driver.get(this.baseURL + "/home");
 		Assertions.assertEquals("Login", driver.getTitle());
+	}
+
+	@Test
+	public void testUserSignupLoginPage() {
+		signup();
+		login();
+//		new WebDriverWait(driver, 60).until(ExpectedConditions.titleIs("Home"));
+//		((JavascriptExecutor) driver).executeScript("arguments[0].click();", driver.findElement(By.id("logoutButton")));
+//		new WebDriverWait(driver, 60).until(ExpectedConditions.titleIs("Login"));
+		WebDriverWait wait = new WebDriverWait(driver, 100);
+		driver.get(this.baseURL + "/login?logout");
+		Assertions.assertEquals("You have been logged out", driver.findElement(By.id("logout-msg")).getText());
+
 	}
 
 	@Test

@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
@@ -53,9 +54,12 @@ public class NotesPage {
 
 	private final WebDriver driver;
 
+	private final WebDriverWait wait;
+
 	public NotesPage(WebDriver webDriver) {
 		this.driver = webDriver;
 		PageFactory.initElements(webDriver, this);
+		wait = new WebDriverWait(driver, 1000);
 	}
 
 	public void openNoteTabJS() {
