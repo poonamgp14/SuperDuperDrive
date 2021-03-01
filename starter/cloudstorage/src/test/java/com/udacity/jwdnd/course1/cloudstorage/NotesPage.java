@@ -15,7 +15,10 @@ public class NotesPage {
 	@FindBy(css = "#nav-notes-tab")
 	private WebElement notesTabField;
 
-	@FindBy(css = "#notes-table-body")
+//	@FindBy(css = "#notes-table-body")
+//	private WebElement notesTable;
+
+	@FindBy(css = "#userTable")
 	private WebElement notesTable;
 
 	@FindBy (css="#add-note-button")

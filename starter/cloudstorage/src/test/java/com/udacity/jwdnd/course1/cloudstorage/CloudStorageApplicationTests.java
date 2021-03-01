@@ -15,9 +15,9 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
+//@ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 class CloudStorageApplicationTests {
 
 	@LocalServerPort
@@ -38,7 +38,7 @@ class CloudStorageApplicationTests {
 	@BeforeEach
 	public void beforeEach() {
 		this.baseURL = "http://localhost:" + this.port;
-//		System.setProperty("webdriver.chrome.driver", "/usr/lib/chromium-browser/chromedriver");
+		//System.setProperty("webdriver.chrome.driver", "/usr/lib/chromium-browser/chromedriver");
 		this.driver = new ChromeDriver();
 	}
 

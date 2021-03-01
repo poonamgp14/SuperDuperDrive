@@ -32,8 +32,8 @@ public class SignupPage {
     }
 
     public void signup(String firstName, String lastName, String username, String password) {
-        ((JavascriptExecutor) driver).executeScript("arguments[0].value='" + firstName + "';", usernameField);
-        ((JavascriptExecutor) driver).executeScript("arguments[0].value='" + lastName + "';", passwordField);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].value='" + firstName + "';", firstNameField);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].value='" + lastName + "';", lastNameField);
         ((JavascriptExecutor) driver).executeScript("arguments[0].value='" + username + "';", usernameField);
         ((JavascriptExecutor) driver).executeScript("arguments[0].value='" + password + "';", passwordField);
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", submitButton);

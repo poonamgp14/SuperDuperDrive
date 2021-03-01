@@ -14,7 +14,10 @@ public class CredentialsPage {
 	@FindBy(css = "#nav-credentials-tab")
 	private WebElement credentialsTabField;
 
-	@FindBy(css = "#credentials-table-body")
+//	@FindBy(css = "#credentials-table-body")
+//	private WebElement credentialsTable;
+
+	@FindBy(css = "#credentialTable")
 	private WebElement credentialsTable;
 
 	@FindBy (css="#add-credential-button")
