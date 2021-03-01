@@ -38,7 +38,7 @@ class CloudStorageApplicationTests {
 	@BeforeEach
 	public void beforeEach() {
 		this.baseURL = "http://localhost:" + this.port;
-		System.setProperty("webdriver.chrome.driver", "/usr/lib/chromium-browser/chromedriver");
+//		System.setProperty("webdriver.chrome.driver", "/usr/lib/chromium-browser/chromedriver");
 		this.driver = new ChromeDriver();
 	}
 
